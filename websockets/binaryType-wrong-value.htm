@@ -4,7 +4,7 @@
     <title>W3C WebSocket API - Create Secure WebSocket - binaryType is set to something other than blob/arraybuffer</title>
     <script type="text/javascript" src="/resources/testharness.js"></script>
     <script type="text/javascript" src="/resources/testharnessreport.js"></script>
-    <script type="text/javascript" src="websocket.js"></script>
+    <script type="text/javascript" src="websocket.js?pipe=sub"></script>
 </head>
 <body>
     <div id="log"></div>
@@ -17,16 +17,15 @@
         var isOpenCalled = false;
 
         wsocket.addEventListener('open', testOpen.step_func(function (evt) {
-            assert_throws("SYNTAX_ERR", function () { wsocket.binaryType = "notBlobOrArrayBuffer" });
             wsocket.close();
             isOpenCalled = true;
+            assert_throws("SYNTAX_ERR", function () { wsocket.binaryType = "notBlobOrArrayBuffer" });
             testOpen.done();
         }), true);
 
         wsocket.addEventListener('close', testClose.step_func(function (evt) {
             assert_true(isOpenCalled, "WebSocket connection should be opened");
             assert_true(evt.wasClean, "wasClean should be true");
-            clearTimeout(timeOut);
             testClose.done();
         }), true);
 
