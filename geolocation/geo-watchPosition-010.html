@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geolocation Test:Geolocation_watchPosition_options_timeout_0_enableHighAccuracy_true</title>
+    <link rel="author" title="Intel" href="http://www.intel.com/">
+    <link rel="help" href="http://www.w3.org/TR/2012/PR-geolocation-API-20120510/#geolocation">
+    <link rel="help" href="http://www.w3.org/TR/2012/PR-geolocation-API-20120510/#watch-position">
+    <script src="../resources/testharness.js"></script>
+    <script src="../resources/testharnessreport.js"></script>
+  </head>
+  <body>
+    <div id="log"></div>
+    <script>
+      var t = async_test("Test checks that call watchPosition with options timeout 0 and enableHighAccuracy true, then occur timeout error");
+      setup({timeout: 20000});
+      try {
+        navigator.geolocation.watchPosition(successCallback, errorCallback, {timeout: 0, enableHighAccuracy: true});
+      } catch (err) {
+        t.step(function () {
+          assert_unreached("Error message: " + err.message);
+        });
+        t.done();
+      }
+      function successCallback (position) {
+        t.step(function () {
+          assert_unreached("successCallback should not be fired");
+        });
+        t.done();
+      }
+      function errorCallback (error) {
+        t.step(function () {
+          assert_equals(error.code, error.TIMEOUT, "call watchPosition with options timeout 0 and enableHighAccuracy true, then occur timeout error");
+        });
+        t.done();
+      }
+  </script>
+</body>
+</html>
