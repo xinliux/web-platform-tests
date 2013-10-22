@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geolocation Test: the attribute code of interface PositionError exists</title>
+    <link rel="author" title="Intel" href="http://www.intel.com/">
+    <link rel="help" href="http://www.w3.org/TR/2012/PR-geolocation-API-20120510/#geolocation">
+    <link rel="help" href="http://www.w3.org/TR/2012/PR-geolocation-API-20120510/#position-error">
+    <script src="/resources/testharness.js"></script>
+    <script src="/resources/testharnessreport.js"></script>
+  </head>
+  <body>
+    <script>
+      var t = async_test("Test checks that the attribute code of interface PositionError exists");
+      setup({timeout: 20000});
+      try {
+        navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {timeout: 0});
+      } catch (err) {
+        t.step(function () {
+          assert_unreached("Error message: " + err.message);
+        });
+        t.done();
+      }
+      function successCallback (position) {
+        t.step(function () {
+          assert_unreached("successCallback should not be fired");
+        });
+        t.done();
+      }
+      function errorCallback (error) {
+        t.step(function () {
+          assert_true("code" in error, "the attribute code of interface PositionError exists");
+        });
+        t.done();
+      }
+    </script>
+    <div id="log"></div>
+  </body>
+</html>

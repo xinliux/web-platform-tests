@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geolocation Test: the attribute message of interface PositionError is readonly</title>
+    <link rel="author" title="Intel" href="http://www.intel.com/">
+    <link rel="help" href="http://www.w3.org/TR/2012/PR-geolocation-API-20120510/#geolocation">
+    <link rel="help" href="http://www.w3.org/TR/2012/PR-geolocation-API-20120510/#position-error">
+    <script src="/resources/testharness.js"></script>
+    <script src="/resources/testharnessreport.js"></script>
+  </head>
+  <body>
+  <div id="log"></div>
+    <script>
+      var t = async_test("Test checks that the attribute message of interface PositionError is readonly";
+      setup({timeout: 20000});
+      try {
+        navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {timeout: 0});
+      } catch (err) {
+        t.step(function () {
+          assert_unreached("Error message: " + err.message);
+        });
+        t.done();
+      }
+      function successCallback (position) {
+        t.step(function () {
+          assert_unreached("successCallback should not be fired");
+        });
+        t.done();
+      }
+      function errorCallback (error) {
+        t.step(function () {
+          error.message = "tests";
+          assert_false(error.message == "tests", "the attribute message of interface PositionError is readonly");
+        });
+        t.done();
+      }
+    </script>
+  </body>
+</html>
