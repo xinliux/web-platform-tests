@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geolocation Test: the attributes of interface Coordinates exists and values are correct</title>
+    <link rel="author" title="Intel" href="http://www.intel.com/">
+    <link rel="help" href="http://www.w3.org/TR/2012/PR-geolocation-API-20120510/#geolocation">
+    <link rel="help" href="http://www.w3.org/TR/2012/PR-geolocation-API-20120510/#coordinates">
+    <script src="/resources/testharness.js"></script>
+    <script src="/resources/testharnessreport.js"></script>
+  </head>
+  <body>
+  <div id="log"></div>
+    <script>
+      var t = async_test("Test checks that the attributes of interface Coordinates exists and values are correct");
+      setup({timeout: 20000});
+      try {
+        navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+      } catch (err) {
+        t.step(function () {
+          assert_unreached("Error message: " + err.message);
+        });
+        t.done();
+      }
+      function successCallback (position) {
+        var accuracy = position.coords.accuracy;
+        var altitudeAccuracy = position.coords.altitudeAccuracy;
+        var altitude = position.coords.altitude;
+        var heading = position.coords.heading;
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
+        var speed = position.coords.speed;
+        t.step(function () {
+          //regular matching (e.g. +12.3 -23.63 16.36 1533.6M etc)
+          var reg = new RegExp("^\-*\\+*[0-9]+.*");
+          //regular matching (e.g. 0<=reg<360 etc)
+          var degrees = new RegExp("^([0-9]|([1-9][0-9])|([1-3][0-5][0-9])).$");
+     
+          assert_true("accuracy" in position.coords, "the attribute accuracy of interface Coordinates exists");
+          assert_true(reg.test(accuracy) || accuracy == null, "the attribute accuracy value of interface Coordinates is specified in meters");
+
+          assert_true("altitudeAccuracy" in position.coords, "the attribute altitudeAccuracy of interface Coordinates exists");
+          assert_true(reg.test(altitudeAccuracy) || altitudeAccuracy == null, "the attribute altitudeAccuracy value of interface Coordinates is specified in meters");
+
+          assert_true("altitude" in position.coords, "the attribute altitude of interface Coordinates exists");
+          assert_true(reg.test(altitude) || altitude == null, "the attribute altitude value of interface Coordinates is specified in meters");
+
+          assert_true("heading" in position.coords, "the attribute heading of interface Coordinates exists");
+          if (speed == 0) {
+            assert_equals(heading, NaN, "the value of the speed attribute is 0, then the value of the heading attribute must be NaN.");
+          } else {
+            assert_true(degrees.test(heading) || heading == null, "the value of the heading attribute is specified in degrees, where 0° ≤ heading < 360°");
+          }
+
+          assert_true("latitude" in position.coords, "the attribute latitude of interface Coordinates exists");
+          assert_true(reg.test(latitude) || latitude == null, "the attribute latitude value of interface Coordinates is specified in decimal degrees");
+
+          assert_true("longitude" in position.coords, "the attribute longitude of interface Coordinates exists");
+          assert_true(reg.test(longitude) || longitude == null, "the attribute longitude value of interface Coordinates is specified in decimal degrees");
+
+          assert_true("speed" in position.coords, "the attribute speed of interface Coordinates exists");
+          assert_true(reg.test(speed) || speed == null, "the attribute speed value of interface Coordinates is specified in meters per second");
+        });
+        t.done();
+      }
+      function errorCallback (error) {
+        t.step(function () {
+          assert_unreached("Error message: " + error.message);
+        });
+        t.done();
+      }
+    </script>
+  </body>
+</html>
