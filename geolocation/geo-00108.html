@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geolocation Test: the error type exists and that its attributes have the right numeric value</title>
+    <link rel="author" title="Intel" href="http://www.intel.com/">
+    <link rel="help" href="http://www.w3.org/TR/2012/PR-geolocation-API-20120510/#geolocation">
+    <link rel="help" href="http://www.w3.org/TR/2012/PR-geolocation-API-20120510/#position-error">
+    <script src="/resources/testharness.js"></script>
+    <script src="/resources/testharnessreport.js"></script>
+  </head>
+  <body>
+    <div id="log"></div>
+    <script>
+      var t =async_test("Test checks that the error type exists and that its attributes have the right numeric value");
+      setup({timeout: 20000});
+      try {
+        window.navigator.geolocation.getCurrentPosition(unexpectedSuccessCallback, errorCallback);
+      } catch (err) {
+        t.step(function () {
+          assert_unreached("Error message: " + err.message);
+        });
+        t.done();
+      }
+      function unexpectedSuccessCallback (position) {
+        t.step(function () {
+          assert_unreached("unexpected successCallback");
+        });
+        t.done();
+      }
+      function errorCallback (error) {
+        t.step(function () {
+          assert_true(error
+            && typeof error == 'object'
+            && error.PERMISSION_DENIED === 1
+            && error.POSITION_UNAVAILABLE === 2
+            && error.TIMEOUT === 3
+            && typeof error.code == 'number'
+            && typeof error.message == 'string', "the error type exists and that its attributes have the right numeric value");
+        });
+        t.done();
+      }
+    </script>
+  </body>
+</html>

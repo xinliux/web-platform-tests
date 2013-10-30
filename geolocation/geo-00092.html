@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geolocation Test: watchPosition a negative timeout value is equivalent to a 0 timeout value</title>
+    <link rel="author" title="Intel" href="http://www.intel.com/">
+    <link rel="help" href="http://www.w3.org/TR/2012/PR-geolocation-API-20120510/#geolocation">
+    <link rel="help" href="http://www.w3.org/TR/2012/PR-geolocation-API-20120510/#watch-position">
+    <script src="/resources/testharness.js"></script>
+    <script src="/resources/testharnessreport.js"></script>
+  </head>
+  <body>
+    <div id="log"></div>
+    <script>
+      var t =async_test("Test checks that watchPosition a negative timeout value is equivalent to a 0 timeout value");
+      setup({timeout: 20000});
+      try {
+        window.navigator.geolocation.watchPosition(unexpectedSuccessCallback, errorCallback, {timeout: -1, maximumAge: 0});
+      } catch (err) {
+        t.step(function () {
+          assert_unreached("Error message: " + err.message);
+        });
+        t.done();
+      }
+      function unexpectedSuccessCallback (position) {
+        t.step(function () {
+          assert_unreached("successCallback should not be fired");
+        });
+        t.done();
+      }
+      function errorCallback (error) {
+        t.step(function () {
+          assert_true(error.code == error.TIMEOUT, "watchPosition a negative timeout value is equivalent to a 0 timeout value");
+        });
+        t.done();
+      }
+    </script>
+  </body>
+</html>

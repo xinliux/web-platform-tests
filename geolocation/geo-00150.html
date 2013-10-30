@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geolocation Test: the geolocation property of window.navigator is enumerable</title>
+    <link rel="author" title="Intel" href="http://www.intel.com/">
+    <link rel="help" href="http://www.w3.org/TR/2012/PR-geolocation-API-20120510/#geolocation">
+    <script src="/resources/testharness.js"></script>
+    <script src="/resources/testharnessreport.js"></script>
+  </head>
+  <body>
+    <div id="log"></div>
+    <script>
+      test(function() {
+        assert_true(hasGeolocationProperty() && 'geolocation' in window.navigator, "the geolocation property of window.navigator is enumerable");
+      }, "Test checks that the geolocation property of window.navigator is enumerable");
+
+      function hasGeolocationProperty() {
+        for (var property in window.navigator) {
+          if (property == 'geolocation') {
+            return true;
+          }
+        }
+        return false;
+      }
+    </script>
+  </body>
+</html>

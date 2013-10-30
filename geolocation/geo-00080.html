@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geolocation Test: calling clearWatch with invalid watch IDs does not cause an exception</title>
+    <link rel="author" title="Intel" href="http://www.intel.com/">
+    <link rel="help" href="http://www.w3.org/TR/2012/PR-geolocation-API-20120510/#geolocation">
+    <link rel="help" href="http://www.w3.org/TR/2012/PR-geolocation-API-20120510/#clear-watch">
+    <script src="/resources/testharness.js"></script>
+    <script src="/resources/testharnessreport.js"></script>
+  </head>
+  <body>
+    <div id="log"></div>
+    <script>
+      var t =async_test("Test checks that calling clearWatch with invalid watch IDs does not cause an exception");
+      setup({timeout: 20000});
+      try {
+        t.step(function () {
+          navigator.geolocation.clearWatch(-1);
+          navigator.geolocation.clearWatch(0);
+          navigator.geolocation.clearWatch(1);
+        });
+        t.done();
+      } catch (err) {
+        t.step(function () {
+          assert_unreached("Error message: " + err.message);
+        });
+        t.done();
+      }
+    </script>
+  </body>
+</html>

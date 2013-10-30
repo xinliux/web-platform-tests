@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geolocation Test: call getCurrentPosition with wrong type for enableHighAccuracy, no exception expected</title>
+    <link rel="author" title="Intel" href="http://www.intel.com/">
+    <link rel="help" href="http://www.w3.org/TR/2012/PR-geolocation-API-20120510/#geolocation">
+    <link rel="help" href="http://www.w3.org/TR/2012/PR-geolocation-API-20120510/#get-current-position">
+    <script src="/resources/testharness.js"></script>
+    <script src="/resources/testharnessreport.js"></script>
+  </head>
+  <body>
+    <div id="log"></div>
+    <script>
+      var t =async_test("Test checks that call getCurrentPosition with wrong type for enableHighAccuracy, no exception expected");
+      setup({timeout: 20000});
+      try {
+        t.step(function () {
+          var geo = window.navigator.geolocation;
+          geo.getCurrentPosition(function () {}, null, {enableHighAccuracy: "boom"});
+          geo.getCurrentPosition(function () {}, null, {enableHighAccuracy: 321});
+          geo.getCurrentPosition(function () {}, null, {enableHighAccuracy: -Infinity});
+          geo.getCurrentPosition(function () {}, null, {enableHighAccuracy: {foo: 5}});
+        });
+        t.done();
+      } catch (err) {
+        t.step(function () {
+          assert_unreached("Error message: " + err.message);
+        });
+        t.done();
+      }
+    </script>
+  </body>
+</html>

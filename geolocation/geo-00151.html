@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geolocation Test: watchPosition returns a long</title>
+    <link rel="author" title="Intel" href="http://www.intel.com/">
+    <link rel="help" href="http://www.w3.org/TR/2012/PR-geolocation-API-20120510/#geolocation">
+    <link rel="help" href="http://www.w3.org/TR/2012/PR-geolocation-API-20120510/#watch-position">
+    <script src="/resources/testharness.js"></script>
+    <script src="/resources/testharnessreport.js"></script>
+  </head>
+  <body>
+    <div id="log"></div>
+    <script>
+      var t =async_test("Test checks that watchPosition returns a long");
+      setup({timeout: 20000});
+      try {
+        var id = window.navigator.geolocation.watchPosition(function () {});
+        t.step(function () {
+          assert_true(typeof id === 'number' && id >= -2147483648 && id <= 2147483647, "watchPosition returns a long");
+        });
+        t.done();
+      } catch (err) {
+        t.step(function () {
+          assert_unreached("Error message: " + err.message);
+        });
+        t.done();
+      }
+    </script>
+  </body>
+</html>

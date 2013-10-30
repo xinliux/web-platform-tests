@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geolocation Test: success callback is called or error callback is called with correct code, when user allows access</title>
+    <link rel="author" title="Intel" href="http://www.intel.com/">
+    <link rel="help" href="http://www.w3.org/TR/2012/PR-geolocation-API-20120510/#geolocation">
+    <link rel="help" href="http://www.w3.org/TR/2012/PR-geolocation-API-20120510/#get-current-position">
+    <script src="/resources/testharness.js"></script>
+    <script src="/resources/testharnessreport.js"></script>
+  </head>
+  <body>
+    <div id="log"></div>
+    <script>
+      var t =async_test("Test checks that success callback is called or error callback is called with correct code, when user allows access");
+      setup({timeout: 20000});
+      try {
+        window.navigator.geolocation.getCurrentPosition(expectedSuccessCallback, errorCallback);
+      } catch (err) {
+        t.step(function () {
+          assert_unreached("Error message: " + err.message);
+        });
+        t.done();
+      }
+      function expectedSuccessCallback (position) {
+        t.step(function () {
+          assert_true(true, "success callback is called, when user allows access");
+        });
+        t.done();
+      }
+      function errorCallback (error) {
+        t.step(function () {
+          if (error.code == error.TIMEOUT || error.code == error.POSITION_UNAVAILABLE) {
+            assert_true(true, "error callback is called with correct code, when user allows access");
+          } else {
+            assert_unreached("Error message: " + error.message);
+          }
+        });
+        t.done();
+      }
+    </script>
+  </body>
+</html>
